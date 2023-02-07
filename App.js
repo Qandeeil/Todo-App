@@ -1,20 +1,56 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, {useState} from 'react'
+import { StyleSheet, View, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import Header from './Components/Header/Header';
+import Form from './Components/Form/Form';
+import List from './Components/List/List';
 
-export default function App() {
+const App = () => {
+
+  const [text,setText] = useState('');
+  const [todo,setTodo] = useState([]);
+
+  const addTodo = () => {
+    if(text.length > 3){
+      setTodo([...todo,text])
+    }else{
+      Alert.alert('OOPS!!', 'Todos most be over 3 char', [
+        {text: 'Exit'}
+      ])
+    }
+  }
+  
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <TouchableWithoutFeedback onPress={
+      () => {Keyboard.dismiss()}
+    }>
+      <View style={styles.contener}>
+        <Header />
+        <View style={styles.content}>
+          <Form 
+            setText = {setText}
+            addTodo = {addTodo}
+            text = {text}
+          />
+          <List 
+            todo = {todo}
+            setText = {setText}
+            setTodo = {setTodo}
+          />
+        </View>
+      </View>
+    </TouchableWithoutFeedback>
+  )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  contener: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#DEFCF9',
   },
-});
+  content: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+})
+
+export default App
